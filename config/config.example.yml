@@ -13,8 +13,8 @@ fastp:
   n_base_limit: 1
   extra: "--overrepresentation_analysis" 
 
-multiqc: 
-  extra:
+# multiqc: 
+#   extra:
 
 star: 
   out_samattributes: "Standard"

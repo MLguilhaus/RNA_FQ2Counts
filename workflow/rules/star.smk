@@ -13,9 +13,9 @@ rule star_align:
         sj_out = os.path.join(
             star_outpath, "{accession}", "SJ.out.tab"
         ),
-        temp_log = os.path.join(
+        temp_log = temp(os.path.join(
             star_outpath, "{accession}", "Log.out"
-        )
+        ))
     conda: "../envs/star.yml"
     log: os.path.join(log_path, "star_align", "{accession}.log") 
     params:

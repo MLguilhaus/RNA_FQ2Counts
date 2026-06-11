@@ -45,7 +45,7 @@ rule trimmed_md5sums:
             tag = ['_R1', '_R2']
         )
     output: 
-        os.path.join(trim_path, "md5sums.txt")
+        os.path.join(trim_path, "trim_origin.md5")
     threads: 1
     resources:
         runtime="20m"

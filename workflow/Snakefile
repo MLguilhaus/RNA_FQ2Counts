@@ -28,8 +28,8 @@ qc_path = os.path.join("output", "multiqc")
 log_path = os.path.join("workflow", "logs")
 star_outpath = os.path.join("data", "star")
 starlog_path = os.path.join("output", "star")
-gtf_path = ("/hpcfs/users/a1627307/genome/gencode.v45.primary_assembly.annotation.gtf")
 fcount_path = os.path.join("output", "counts")
+multi_qc_path = os.path.join("output")
 
 # Define se fastq output only
 ALL_FQ = expand(
@@ -46,7 +46,7 @@ ALL_MQC = [os.path.join(qc_path, "multiqc.html")]
 
 ALL_MD5 = expand(
 	os.path.join(md5_outpath, "{prefix}.md5"),
-	prefix = ['fq_txfer', 'fq_origin', 'fq.chk', 'star_origin']
+	prefix = ['fq_txfer', 'fq_origin', 'trim_origin' 'fq.chk', 'star_origin']
 )
 
 ALL_BAM = expand(

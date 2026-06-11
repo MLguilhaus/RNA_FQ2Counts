@@ -1,7 +1,3 @@
-def get_gtf(wildcards):
-    pat = os.path.join(ref_path, "*.gtf.gz")
-    gtf = glob.glob(pat)[0]
-    return(gtf)
 
 rule feature_counts_star:
     input:
