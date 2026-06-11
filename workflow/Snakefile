@@ -46,7 +46,7 @@ ALL_MQC = [os.path.join(qc_path, "multiqc.html")]
 
 ALL_MD5 = expand(
 	os.path.join(md5_outpath, "{prefix}.md5"),
-	prefix = ['fq_txfer', 'fq_origin', 'trim_origin' 'fq.chk', 'star_origin']
+	prefix = ['fq_txfer', 'fq_origin', 'trim_origin', 'fq.chk', 'star_origin']
 )
 
 ALL_BAM = expand(

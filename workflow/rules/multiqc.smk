@@ -22,7 +22,7 @@ rule multiqc:
           {params.extra} \
           --force \
           -v \
-          --dirs-depth 4
+          --dirs-depth 4 \
           -o {params.outdir} \
           -n multiqc.html \
           {params.run_dir} 2>> {log}
