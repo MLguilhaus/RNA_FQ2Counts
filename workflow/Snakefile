@@ -1,0 +1,97 @@
+import pandas as pd
+import numpy as np
+import os
+import re
+
+configfile: "config/config.yml"
+
+## Load samples & set all columns to strings
+df = pd.read_table(config['samples'])
+
+## Check there are accessions
+n = len(df.Run)
+assert (n > 0), "No accessions were specified. Please add at least one ID"
+
+## Define key values
+accessions = df.Run
+
+## Constrain wildcards
+wildcard_constraints:
+	accession = "(" + '|'.join(accessions) + ")",
+
+# All subsequent paths
+raw_path = os.path.join("data", "fastq", "raw")
+trim_path = os.path.join("data", "fastq", "trimmed")
+md5_outpath = os.path.join("output", "md5")
+fastp_outpath = os.path.join("output", "fastp")
+qc_path = os.path.join("output", "multiqc")
+log_path = os.path.join("workflow", "logs")
+star_outpath = os.path.join("data", "star")
+starlog_path = os.path.join("output", "star")
+gtf_path = ("/hpcfs/users/a1627307/genome/gencode.v45.primary_assembly.annotation.gtf")
+fcount_path = os.path.join("output", "counts")
+
+# Define se fastq output only
+ALL_FQ = expand(
+   os.path.join(raw_path, "{f}_R{r}.fastq.gz"),
+	r = ['1', '2'], f = accessions
+)
+
+ALL_FP = expand(
+    os.path.join(fastp_outpath, "{f}_fastp.{suffix}"),
+	 f = accessions, suffix = ['json', 'html']
+)
+
+ALL_MQC = [os.path.join(qc_path, "multiqc.html")]
+
+ALL_MD5 = expand(
+	os.path.join(md5_outpath, "{prefix}.md5"),
+	prefix = ['fq_txfer', 'fq_origin', 'fq.chk', 'star_origin']
+)
+
+ALL_BAM = expand(
+	os.path.join(star_outpath, "{id}", "Aligned.sortedByCoord.out.bam"),
+	id = accessions
+)
+
+ALL_STARLOGS = expand(
+	os.path.join(starlog_path, "{id}_{f}"),
+	id = accessions, f = ['Log.final.out', 'SJ.out.tab']
+)
+
+ALL_FLAGSTAT = expand(
+	os.path.join(starlog_path, "{id}_samtools.flagstat"),
+	id = accessions
+)
+
+ALL_BAI = expand(
+ 	os.path.join(star_outpath, "{id}", "Aligned.sortedByCoord.out.bam.bai"),
+     id = accessions
+)
+
+ALL_COUNTS = expand(
+	os.path.join(fcount_path, "star_counts.{suffix}"),
+	suffix = ['out', 'out.summary']
+)
+
+ALL_OUTPUTS = []
+ALL_OUTPUTS.extend(ALL_MD5)
+ALL_OUTPUTS.extend(ALL_FQ)
+ALL_OUTPUTS.extend(ALL_FP)
+ALL_OUTPUTS.extend(ALL_MQC)
+ALL_OUTPUTS.extend(ALL_BAM)
+ALL_OUTPUTS.extend(ALL_STARLOGS)
+ALL_OUTPUTS.extend(ALL_FLAGSTAT)
+ALL_OUTPUTS.extend(ALL_BAI)
+ALL_OUTPUTS.extend(ALL_COUNTS)
+
+rule all:
+	input:
+		ALL_OUTPUTS
+
+include: "rules/get_fastq.smk"
+include: "rules/fastp.smk"
+include: "rules/multiqc.smk"
+include: "rules/star.smk"
+include: "rules/feature-counts.smk"
+include: "rules/index-bam.smk"

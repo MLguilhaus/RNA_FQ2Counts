@@ -1,0 +1,14 @@
+.snakemake
+.parallel
+.keras
+data/*
+workflow/slurm/*
+config/config.yml
+output/*
+workflow/logs/*
+tmp/*
+int/*
+workflow/tmp/*
+workflow/int/*
+.keras*
+.parallel*
