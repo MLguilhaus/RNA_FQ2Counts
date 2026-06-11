@@ -90,10 +90,10 @@ Key fields to set:
 
 ## Running the workflow
 
-Dry run first to check the job graph:
+Open a screen session and dry run the workflow to check the job graph:
 
 ```bash
-snakemake -n --use-conda
+snakemake -np --use-conda
 ```
 
 Run on the cluster (adjust profile name as needed):
@@ -102,8 +102,9 @@ Run on the cluster (adjust profile name as needed):
 snakemake --use-conda --cores <N> --profile <slurm-profile>
 ```
 
-Phoenix is on a SLURM scheduler, you will need to save a profile yaml file in your home directory to set your preferences for defualt reseources and other default cluster options. An example can be found in this repository named example_slurm_profile.yml.
+Phoenix is on a SLURM scheduler, you will need to save a yaml profile file in your home directory to set your preferences for defualt reseources and other default cluster options. An example can be found in this repository named example_slurm_profile.yml.
 
+```--cores <N>``` controls how many concurrent jobs Snakemake will submit to SLURM at once. Snakemake tracks each job's ```threads:``` value against this budget — for example, with ```--cores 16``` and rules using the default ```threads: 1```, up to 16 jobs can run simultaneously. Setting this too low will throttle job submission even when the cluster has capacity.
 
 ---
 
