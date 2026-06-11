@@ -1,0 +1,37 @@
+samples: "config/test_samples.tsv"
+
+ssh:
+  host: 'a*******@phoenix-login1.adelaide.edu.au'
+  host_path: '/uofaresstor/path/to/files'
+  host_md5: '/uofaresstor/path/to/origin/md5'
+ 
+
+fastp:
+  average_qual: 30
+  cut_mean_quality: 30
+  length_required: 50
+  n_base_limit: 1
+  extra: "--overrepresentation_analysis" 
+
+multiqc: 
+  extra:
+
+star: 
+  out_samattributes: "Standard"
+  out_samtype: "BAM SortedByCoordinate"
+  out_samunmapped: "Within KeepPairs" 
+  multimap_nmax: 10
+  mismatch_nmax: 10
+  star_ref_path: "/path/to/reference/genome" # ensure STAR index of this genome is in the same directory
+  extra: 
+
+featureCounts:
+  minQual: 1
+  minOverlap: 35
+  fracOverlap: 0.9
+  strandedness: 0 
+  extra: "-p -B -M --fraction"
+  gtf: "/path/to/annotation/file"
+
+# samtools:
+#   extra: 

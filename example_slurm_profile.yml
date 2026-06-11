@@ -1,0 +1,37 @@
+cluster:
+  logdir=$(dirname workflow/slurm/{rule}/{rule}-{wildcards}) &&
+  mkdir -p $logdir &&
+  sbatch
+    --account=<your_account>
+    --partition=<your_partitions>
+    --nodes=1
+    --cpus-per-task={threads}
+    --mem={resources.mem_mb}
+    --time={resources.runtime}
+    --job-name={rule}-{wildcards}
+    --output=workflow/slurm/{rule}/%j-{rule}-{wildcards}.log
+    --parsable
+    --gres=tmpfs:10G
+    --mail-user=<your.email@email.com>
+    --mail-type=FAIL
+default-resources:
+  - mem_mb=2048
+  - runtime="1h"
+restart-times: 0
+jobs: 100
+max-jobs-per-second: 2
+max-status-checks-per-second: 5
+local-cores: 1
+use-conda: True
+latency-wait: 60
+conda-prefix: "/path/to/your/conda/envs/folder"
+notemp: True
+keep-going: True
+rerun-incomplete: True
+rerun-triggers: mtime
+printshellcmds: True
+scheduler: greedy
+cluster-cancel: scancel
+notemp: True  ## If storage quotas permit, I prefer to hold temp files and use --delete-temp-output upon completion
+use-singularity: True
+singularity-args: "--bind /hpcfs/users/a******/snakemake-profile-singularity"
